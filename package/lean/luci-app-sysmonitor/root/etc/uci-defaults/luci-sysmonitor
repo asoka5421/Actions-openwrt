@@ -1,0 +1,25 @@
+#!/bin/sh
+uci -q batch <<-EOF >/dev/null
+delete ucitrack.@sysmonitor[-1]
+add ucitrack sysmonitor
+set ucitrack.@sysmonitor[-1].init=sysmonitor
+commit ucitrack
+EOF
+
+echo '0 3 * * 0 /usr/share/sysmonitor/smartdnsAD.sh' >>/etc/crontabs/root
+
+cat > /etc/config/ttyd <<EOF
+config ttyd
+	option interface '@lan'
+	option command '/bin/login'
+EOF
+
+uci set luci-app-pptp-server.pptpd.enabled=0
+uci commit luci-app-pptp-server
+uci set ipsec.ipsec.enabled=0
+uci commit ipsec
+
+chmod 0755 /etc/init.d/sysmonitor /usr/share/sysmonitor/*.sh
+rm -rf /tmp/luci-modulecache /tmp/luci-indexcache
+
+exit 0
