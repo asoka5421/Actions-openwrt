@@ -68,8 +68,8 @@ run_bridge()
 	uci set network.bridge.dns=$gateway
 	uci set network.bridge.force_link='0'
 	uci set network.bridge.mtu='1472'
-	#uci set network.bridge.type='bridge'
-	#uci set network.bridge.stp='1'
+	uci set network.bridge.type='bridge'
+	uci set network.bridge.stp='1'
 	uci commit network
 
 	#写入firewall防火墙
